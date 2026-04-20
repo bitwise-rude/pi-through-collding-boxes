@@ -4,17 +4,13 @@
 
 #define HEIGHT 600
 #define WIDTH  900
-
 #define VWALL_X 20
 #define HWALL_Y HEIGHT/2 + 90
 
 #define SIZE_PER_MASS 5
-
 #define VEL -0.0009f
 
 #define  MASS_RATIO 100000000
-
-
 
 typedef struct {
     double x;
@@ -30,6 +26,7 @@ int main() {
     Box left_box = {.x = VWALL_X + 10, .mass = 5, .vel = 0.0f};
     left_box.size = left_box.mass * SIZE_PER_MASS;
 
+    // TODO: Use preprocessor for this thing
     Box right_box = {.x = VWALL_X + 50, .mass = 5*MASS_RATIO, .vel = VEL};
     if  (SIZE_PER_MASS * MASS_RATIO >=  100) {
         right_box.size = 100;
@@ -57,7 +54,7 @@ int main() {
             DrawLine(VWALL_X, HWALL_Y, 20, 0, BLACK);
 
             // draw only if on range
-            
+            // TODO: Optimize this belowk 
             // draw left mass
             if (left_box.x > (double)   VWALL_X) {
                 DrawRectangle(left_box.x , HWALL_Y - left_box.size,left_box.size, left_box.size, RED);
@@ -87,22 +84,19 @@ int main() {
         right_box.x += right_box.vel;
         left_box.x += left_box.vel;
         
+        // TOOD: optimize
         // collision of left box and right box
         if (right_box.x <= (left_box.x + left_box.size)) {
             double temp =  ((left_box.mass - right_box.mass) *  left_box.vel + 2 * right_box.mass * right_box.vel) /  sum_of_mass;
             right_box.vel =  ((right_box.mass -  left_box.mass) *  right_box.vel + 2 * left_box.mass * left_box.vel) /  sum_of_mass;
             left_box.vel = temp;
             collisions  ++;
-
-            // right_box.x = left_box.x + left_box.size;
         }
 
         // collision with wall
         if (left_box.x <= (double)   VWALL_X) {
             left_box.vel = -1 * left_box.vel;
             collisions  ++;
-
-            // left_box.x = (float) VWALL_X;
         }
     }
 
